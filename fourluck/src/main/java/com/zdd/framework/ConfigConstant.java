@@ -16,5 +16,6 @@ public interface ConfigConstant {
 	String APP_BASE_PACKAGE = "fourluck.framework.app.base_package";
 	String APP_JSP_PATH = "fourluck.framework.app.jsp_path";
 	String APP_ASSET_PATH = "fourluck.framework.app.asset_path";
+	String APP_UPLOAD_LIMIT = "fourluck.framework.app.upload_limit";
 	
 }

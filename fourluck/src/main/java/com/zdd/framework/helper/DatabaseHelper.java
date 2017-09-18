@@ -5,14 +5,19 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.sql.Connection;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
+import java.util.Set;
+
+import javax.sql.DataSource;
 
 import org.apache.commons.dbcp2.BasicDataSource;
 import org.apache.commons.dbutils.QueryRunner;
 import org.apache.commons.dbutils.handlers.BeanHandler;
 import org.apache.commons.dbutils.handlers.BeanListHandler;
+import org.apache.commons.dbutils.handlers.MapHandler;
 import org.apache.commons.dbutils.handlers.MapListHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -96,6 +101,41 @@ public class DatabaseHelper {
 	}
 	
 	/**
+	 * 查询单行记录单个字段
+	 * @param sql
+	 * @param params
+	 * @return
+	 */
+	public static String query(String sql,Object... params){
+		String result = "";
+		Map<String,Object> resultMap = executeQueryMap(sql,params);
+		if(CollectionUtil.isNotEmpty(resultMap)){
+			Object resultArray[] = resultMap.values().toArray();
+			result = (String) resultArray[0];
+		}
+		return result;
+	}
+	
+	/**
+	 * 查询多行记录单个字段
+	 * @param sql
+	 * @param params
+	 * @return
+	 */
+	public static Set<String> querySet(String sql,Object... params){
+		Set<String> result = new HashSet<String>();
+		List<Map<String,Object>> resultList = executeQuery(sql,params);
+		if(CollectionUtil.isNotEmpty(resultList)){
+			for(Map<String,Object> resultMap : resultList){
+				if(CollectionUtil.isNotEmpty(resultMap)){
+					Object resultArray[] = resultMap.values().toArray();
+					result.add((String) resultArray[0]);
+				}
+			}
+		}
+		return result;
+	}
+	/**
 	 * 执行查询语句
 	 * @param sql
 	 * @param params
@@ -107,7 +147,24 @@ public class DatabaseHelper {
 			Connection connection = getConnection();
 			result = QUERY_RUNNER.query(connection, sql, new MapListHandler(),params);
 		} catch (Exception e) {
-			LOGGER.error("execute query entity failure",e);
+			LOGGER.error("execute query entity list failure",e);
+			throw new RuntimeException(e);
+		}
+		return result;
+	}
+	/**
+	 * 执行查询语句
+	 * @param sql
+	 * @param params
+	 * @return
+	 */
+	public static Map<String,Object> executeQueryMap(String sql,Object... params){
+		Map<String,Object> result;
+		try {
+			Connection connection = getConnection();
+			result = QUERY_RUNNER.query(connection, sql, new MapHandler(),params);
+		} catch (Exception e) {
+			LOGGER.error("execute query entity map failure",e);
 			throw new RuntimeException(e);
 		}
 		return result;
@@ -178,6 +235,11 @@ public class DatabaseHelper {
 	public static <T> boolean deleteEntity(Class<T> entityClass,long id){
 		String sql = "delete from " + getTableName(entityClass) + " where id = ? ";
 		return executeUpdate(sql, id) == 1;
+	}
+	
+	public static DataSource getDataSource() {
+		// TODO Auto-generated method stub
+		return DATA_SOURCE;
 	}
 	
 	private static String getTableName(Class<?> entityClass) {

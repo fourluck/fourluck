@@ -5,7 +5,9 @@ import java.util.Map;
 
 import com.zdd.framework.annotation.Service;
 import com.zdd.framework.annotation.Transaction;
+import com.zdd.framework.bean.FileParam;
 import com.zdd.framework.helper.DatabaseHelper;
+import com.zdd.framework.helper.UploadHelper;
 import com.zdd.framework.model.Customer;
 
 @Service
@@ -59,5 +61,19 @@ public class CustomerService {
 	@Transaction
 	public boolean deleteCustomer(long id){
 		return DatabaseHelper.deleteEntity(Customer.class, id);
+	}
+
+	/**
+	 * 新增客户
+	 * @param customerMap
+	 * @return
+	 */
+	@Transaction
+	public boolean createCustomer(Map<String, Object> customerMap, FileParam fileParam) {
+		boolean result = DatabaseHelper.insertEntity(Customer.class, customerMap);
+		if(result){
+			UploadHelper.uploadFile("/tmp/upload/", fileParam);
+		}
+		return result;
 	}
 }

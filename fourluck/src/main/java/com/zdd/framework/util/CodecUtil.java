@@ -3,6 +3,7 @@ package com.zdd.framework.util;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
 
+import org.apache.commons.codec.digest.DigestUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -45,5 +46,9 @@ public final class CodecUtil {
 			throw new RuntimeException(e);
 		}
 		return target;
+	}
+	
+	public static String md5(String source){
+		return DigestUtils.md5Hex(source);
 	}
 }

@@ -24,6 +24,7 @@ public final class ControllerHelper {
 	private static final Map<Request,Handler> ACTION_MAP = new HashMap<Request, Handler>();
 	
 	static{
+		//所有controller类
 		Set<Class<?>> controllerClassSet = ClassHelper.getControllerClassSet();
 		if(CollectionUtil.isNotEmpty(controllerClassSet)){
 			for(Class<?> controllerClass : controllerClassSet){

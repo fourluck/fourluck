@@ -59,6 +59,29 @@ public class ConfigHelper {
 	public static String getAppAssetPath(){
 		return PropsUtil.getString(CONFIG_PROPS, ConfigConstant.APP_ASSET_PATH,"/asset/");
 	}
+	/**
+	 * 获取文件上传文件大小限制
+	 * @return
+	 */
+	public static int getAppUploadLimit() {
+		return PropsUtil.getInt(CONFIG_PROPS, ConfigConstant.APP_UPLOAD_LIMIT, 10);
+	}
+	
+	/**
+	 * 获取相关字段属性值
+	 * @return
+	 */
+	public static String getString(String key) {
+		return PropsUtil.getString(CONFIG_PROPS, key);
+	}
+	
+	/**
+	 * 获取相关字段属性值
+	 * @return
+	 */
+	public static boolean getBoolean(String key) {
+		return PropsUtil.getBoolean(CONFIG_PROPS, key);
+	}
 	
 	
 }

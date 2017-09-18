@@ -12,9 +12,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.zdd.framework.annotation.Aspect;
+import com.zdd.framework.annotation.Service;
 import com.zdd.framework.proxy.AspectProxy;
 import com.zdd.framework.proxy.Proxy;
 import com.zdd.framework.proxy.ProxyManager;
+import com.zdd.framework.proxy.TransactionProxy;
 
 
 public final class AopHelper {
@@ -42,6 +44,26 @@ public final class AopHelper {
 	 */
 	private static Map<Class<?>, Set<Class<?>>> createProxyMap()throws Exception {
 		Map<Class<?>, Set<Class<?>>> proxyMap = new HashMap<Class<?>, Set<Class<?>>>();
+		addAspectProxy(proxyMap);
+		addTransactionProxy(proxyMap);
+		return proxyMap;
+	}
+
+	/**
+	 * 事务类代理映射关系
+	 * @param proxyMap
+	 */
+	private static void addTransactionProxy(Map<Class<?>, Set<Class<?>>> proxyMap) {
+		Set<Class<?>> serviceClassSet = ClassHelper.getClassSetByAnnotation(Service.class);
+		proxyMap.put(TransactionProxy.class, serviceClassSet);
+	}
+
+	/**
+	 * 普通类代理映射关系
+	 * @param proxyMap
+	 * @throws Exception
+	 */
+	private static void addAspectProxy(Map<Class<?>, Set<Class<?>>> proxyMap)throws Exception {
 		Set<Class<?>> proxyClassSet = ClassHelper.getClassSetBySuper(AspectProxy.class);
 		for(Class<?> proxyClass : proxyClassSet){
 			if(proxyClass.isAnnotationPresent(Aspect.class)){
@@ -50,7 +72,6 @@ public final class AopHelper {
 				proxyMap.put(proxyClass, targetClassSet);
 			}
 		}
-		return proxyMap;
 	}
 
 	/**

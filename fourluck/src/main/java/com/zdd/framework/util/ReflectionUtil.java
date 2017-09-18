@@ -32,6 +32,22 @@ public final class ReflectionUtil {
 	}
 	
 	/**
+	 * 创建实例
+	 * @param cls
+	 * @return
+	 */
+	public static Object newInstance(String className){
+		Object instance;
+		try {
+			instance = Class.forName(className).newInstance();
+		} catch (Exception e) {
+			LOGGER.error("new instance failure",e);
+			throw new RuntimeException();
+		} 
+		return instance;
+	}
+	
+	/**
 	 * 调用方法
 	 * @param obj
 	 * @param method

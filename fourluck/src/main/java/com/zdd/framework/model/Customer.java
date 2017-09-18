@@ -19,12 +19,17 @@ public class Customer {
 	/**
 	 * 电话号码
 	 */
-	private String telePhone;
+	private String telephone;
 	
 	/**
 	 * 邮箱
 	 */
 	private String email;
+	
+	/**
+	 * 照片
+	 */
+	private String photo;
 	
 	/**
 	 * 备注
@@ -55,12 +60,12 @@ public class Customer {
 		this.contact = contact;
 	}
 
-	public String getTelePhone() {
-		return telePhone;
+	public String getTelephone() {
+		return telephone;
 	}
 
-	public void setTelePhone(String telePhone) {
-		this.telePhone = telePhone;
+	public void setTelephone(String telephone) {
+		this.telephone = telephone;
 	}
 
 	public String getEmail() {
@@ -77,6 +82,14 @@ public class Customer {
 
 	public void setRemark(String remark) {
 		this.remark = remark;
+	}
+
+	public String getPhoto() {
+		return photo;
+	}
+
+	public void setPhoto(String photo) {
+		this.photo = photo;
 	}
 	
 }
