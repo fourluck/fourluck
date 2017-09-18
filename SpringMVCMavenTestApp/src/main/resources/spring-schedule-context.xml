@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd" >
+	
+	<bean id="jobDetailParent" abstract="true">
+    	<property name="targetMethod" value="doJob"/>
+    </bean>
+    	
+	<!-- Scheduled Factory -->
+	<bean id="scheduledBean" class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+		<property name="triggers">
+			<list>
+				  <!--KU填写参数过期邮件提醒 -->
+				<ref bean="testScheduledTrigger" />
+				
+			</list>
+		</property>
+	</bean>
+	
+	
+	<!-- Job Trigger -->
+	
+	<bean id="testScheduledTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail" ref="testDetail"/>
+		<!--  ss mm hh  -->
+		<!-- <property name="cronExpression" value="0 0/2 0-23 * * ?"/> -->
+		<property name="cronExpression" value="0 12 11 ? * *"/>
+	</bean>
+	
+	<bean id="testDetail" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean" parent="jobDetailParent">
+			<property name="targetObject" ref="testSchedule"/>
+	</bean>
+	
+	<!-- Job Bean -->
+	<bean id="testSchedule" class="com.zdd.springmvc.taskschedule.TestSchedule">
+	</bean>
+	
+	
+</beans>
